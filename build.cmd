@@ -1,0 +1,1 @@
+go build home_bot.go

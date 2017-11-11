@@ -1,0 +1,1 @@
+digitemp.exe -a -q -cdigitemp.cfg -o"%%.2C"
