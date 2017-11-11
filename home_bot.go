@@ -17,7 +17,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-    CREDITS
+	CREDITS
+	Syfaro - Golang bindings for the Telegram Bot API https://github.com/go-telegram-bot-api/telegram-bot-api
     Brian C. Lane - digitemp https://www.digitemp.com/
     Ted Burke - RobotEyez https://github.com/tedburke/RobotEyez
 */
