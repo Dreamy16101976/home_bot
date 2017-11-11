@@ -10,6 +10,7 @@ Email:    support@foxylab.com
 Website:  https://acdc.foxylab.com
 
 CREDITS
+Syfaro - Golang bindings for the Telegram Bot API https://github.com/go-telegram-bot-api/telegram-bot-api
 Brian C. Lane - digitemp https://www.digitemp.com/
 Ted Burke - RobotEyez https://github.com/tedburke/RobotEyez
 
