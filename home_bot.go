@@ -20,7 +20,7 @@
     CREDITS
     Brian C. Lane - digitemp https://www.digitemp.com/
     Ted Burke - RobotEyez https://github.com/tedburke/RobotEyez
-*/ 
+*/
 
 package main
 
@@ -32,22 +32,28 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+
 	"github.com/Syfaro/telegram-bot-api" ////go get github.com/Syfaro/telegram-bot-api
-	"golang.org/x/image/bmp" //go get golang.org/x/image/bmp
+	"golang.org/x/image/bmp"             //go get golang.org/x/image/bmp
 )
 
 var (
-	botToken   string //токен бота
-	godString  string //ID бога (строка)
-	god        int //ID бога (число)
-	bmpFile    string = "frame.bmp" //имя BMP-файла
-	jpgFile    string = "frame.jpg" //имя JPEG-файла
-	jpgQuality int    = 80          //качество JPEG-файла
-	spyCmd     string = "\\spy.cmd" //командный файл для получения снимка
+	botToken   string                //токен бота
+	godString  string                //ID бога (строка)
+	god        int                   //ID бога (число)
+	bmpFile    string = "frame.bmp"  //имя BMP-файла
+	jpgFile    string = "frame.jpg"  //имя JPEG-файла
+	jpgQuality int    = 80           //качество JPEG-файла
+	spyCmd     string = "\\spy.cmd"  //командный файл для получения снимка
 	tempCmd    string = "\\temp.cmd" //командный файл для считывания температуры
 )
 
 func init() {
+	log.Printf("Telegram bot for Smart Home")
+	log.Printf("(C) 2017 - Alexey \"FoxyLab\" Voronin")
+	log.Printf("Email: support@foxylab.com")
+	log.Printf("Website: https://acdc.foxylab.com")
+
 	flag.StringVar(&botToken, "bot", "", "Bot Token") //-bot
 	flag.StringVar(&godString, "god", "", "God ID")   //-god
 	flag.Parse()
@@ -71,7 +77,7 @@ func main() {
 	}
 	god = int(god64)
 	//создание экземляра бота
-	bot, err := tgbotapi.NewBotAPI(botToken) 
+	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -143,7 +149,7 @@ func main() {
 				panic(err)
 			}
 			os.Chdir(pwd)
-			cmdf := pwd + spyCmd //формирование команды для получения снимка
+			cmdf := pwd + spyCmd          //формирование команды для получения снимка
 			cmd := exec.Command(cmdf, "") //выполнение команды
 			cmd.Run()
 			//преобразование BMP в JPEG
