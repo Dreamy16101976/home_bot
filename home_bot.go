@@ -1,4 +1,4 @@
-/*  home_bot - Telegram bot for Smart Home
+﻿/*  home_bot - Telegram bot for Smart Home
     Copyright (C) 2017 - Alexey "FoxyLab" Voronin
     Email:    support@foxylab.com
     Website:  https://acdc.foxylab.com
@@ -33,7 +33,6 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-
 	"github.com/Syfaro/telegram-bot-api" ////go get github.com/Syfaro/telegram-bot-api
 	"golang.org/x/image/bmp"             //go get golang.org/x/image/bmp
 )
@@ -41,6 +40,7 @@ import (
 var (
 	botToken   string                //токен бота
 	godString  string                //ID бога (строка)
+	camString  string		 //номер камеры
 	god        int                   //ID бога (число)
 	bmpFile    string = "frame.bmp"  //имя BMP-файла
 	jpgFile    string = "frame.jpg"  //имя JPEG-файла
@@ -57,17 +57,24 @@ func init() {
 
 	flag.StringVar(&botToken, "bot", "", "Bot Token") //-bot
 	flag.StringVar(&godString, "god", "", "God ID")   //-god
+	flag.StringVar(&camString, "cam", "", "Cam Num")  //-cam
 	flag.Parse()
 	//требуется задание токена
 	if botToken == "" {
 		log.Print("-bot is required")
 		os.Exit(1)
 	}
-	//трбуется задание ID бога
+	//требуется задание ID бога
 	if godString == "" {
 		log.Print("-god is required")
 		os.Exit(1)
 	}
+	//требуется задание номера камеры
+	if camString == "" {
+		log.Print("-cam is required")
+		os.Exit(1)
+	}
+
 }
 
 func main() {
@@ -85,7 +92,7 @@ func main() {
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 	//создание структуры для получения обновлений
 	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+	u.Timeout = 120
 	updates, err := bot.GetUpdatesChan(u) //создание канала
 	//обработка обновлений
 	for update := range updates {
@@ -151,8 +158,19 @@ func main() {
 			}
 			os.Chdir(pwd)
 			cmdf := pwd + spyCmd          //формирование команды для получения снимка
-			cmd := exec.Command(cmdf, "") //выполнение команды
-			cmd.Run()
+			//выполнение команды
+			cmd := exec.Command(cmdf, camString)
+			err = cmd.Start()
+			log.Printf("Shot...")
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = cmd.Wait()
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Printf("O.K.")
+			log.Printf("Convert...")
 			//преобразование BMP в JPEG
 			imgfile, err := os.Open(bmpFile)
 			if err != nil {
@@ -168,6 +186,7 @@ func main() {
 			opt.Quality = jpgQuality
 			jpeg.Encode(out, img, &opt)
 			out.Close()
+			log.Printf("O.K.")
 			//формирование файла для отправки
 			f, err := os.Open(jpgFile)
 			if err != nil {

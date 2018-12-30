@@ -1,2 +1,5 @@
 *.txt
 home_bot.exe
+digitemp_init.cmd
+digitemp.cfg
+devs.cmd
